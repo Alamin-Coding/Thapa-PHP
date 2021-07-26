@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -24,7 +28,11 @@
         
     </style>
 
-    <?php
+
+
+
+</head>
+<?php
     include 'dataBaseConnection.php';
     if(isset($_POST['submit'])){
         $userName = mysqli_real_escape_string($con, $_POST['username']);
@@ -35,20 +43,20 @@
 
         $hashPassword = password_hash($password, PASSWORD_BCRYPT);
         $hashCpassword = password_hash($cpassword, PASSWORD_BCRYPT);
-
-        $emailQuery = "select * form signup where eamil = '$email";
-        $quey = mysqli_query($con, $emailQuery);
+        // SELECT * FROM `signup` WHERE
+        $emailquery = "select * from signup where eamil = '$email";
+        $quey = mysqli_query($con, $emailquery);
         $emailCount = mysqli_num_rows($quey);
 
         if($emailCount>0){
             echo "Email already Exists";
         }else{
             if ($password === $cpassword) {
-                $insertQurery = "insert into signup(username, email, number, password, cpassword) values('$userName','$email','$phoneNumber','$hashPassword','$hashCpassword' )";
+                $insertqurery = "insert into signup( username, email, number, password, cpassword) values('$userName','$email','$phoneNumber','$hashPassword','$hashCpassword' )";
 
-                $iquery = mysqli_query($con, $insertQurery);
+                $iquery = mysqli_query($con, $insertqurery);
 
-                if ($con) {
+                if ($iquery) {
                     ?>
                        <script>
                            alert("Insertet Succeseful");
@@ -72,9 +80,6 @@
 
     ?>
 
-
-</head>
-
 <body>
     <section>
         <div class="container">
@@ -88,8 +93,8 @@
                             <a class="facebook" href="#"><i class="fab fa-facebook-f"></i> Login via Facebook</a>
                         </div>
                         <span class="or">OR</span>
-
-                        <form action="" methot="POST">
+                        
+                        <form action="<?php echo htmlentities($_SERVER['PHP_SELF']); ?>" methot="POST">
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="basic-addon1"><i class="fas fa-user"></i></span>
                                 <input type="text" name="username" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" required>
@@ -113,7 +118,7 @@
                             <button class="btn btn-info bubmit_btn" type="submit" name="submit">Create Account</button>
                             <p>Have an account ? <a href="#">Log in</a></p>
                         </form>
-
+                    
 
                     </div>
                 </div>
